@@ -1,0 +1,52 @@
+{% extends "ltk_base.html" %}
+{% load staticfiles i18n %}
+
+{% block head_title %}Regular expressions{% endblock %}
+
+{% block extra_style %}
+<style>
+</style>
+{% endblock extra_style %}
+
+{% block content %}
+    <div class="boxcontent">
+
+	<h1>Regular expression tester</h1>
+<div><smaller><i>From the <a href="https://github.com/ChandraLingam/PyRegex">LearnRegex</a> module by Chandra Lingam</i></smaller></div>
+
+<form action="/regexp/" method="post">
+	{% csrf_token %}
+	<input type="hidden" id="index" name="index" value="{{ index }}">
+
+<table class="table table-responsive table-bordered table-striped">
+<tbody>
+	<tr>
+		<th>{% trans "search pattern"|capfirst %}</th>
+		<td colspan="4">{{ form.search_pattern.errors }}{{ form.search_pattern }}</td>
+	</tr>
+	<tr>
+		<th>{% trans "replacement pattern"|capfirst %}</th>
+		<td colspan="4">{{ form.replace_pattern.errors }}{{ form.replace_pattern }}</td>
+	</tr>
+	<tr>
+		<th>{% trans "text"|capfirst %}</th>
+		<td colspan="4">{{ form.text }}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td style="text-align: center;"><input type="submit" class="btn btn-sm btn-default" name="match" value="{% trans "match"|capfirst %}"></td>
+		<td style="text-align: center;"><input type="submit" class="btn btn-sm btn-default" name="next" value="{% trans "next match"|capfirst %}"></td>
+		<td style="text-align: center;"><input type="submit" class="btn btn-sm btn-default" name="replace" value="{% trans "replace"|capfirst %}"></td>
+		<td style="text-align: center;"><input type="submit" class="btn btn-sm btn-default" name="split" value="{% trans "split"|capfirst %}"></td>
+	</tr>
+	<tr>
+		<th>{% trans "result"|capfirst %}</th>
+		<td colspan="4">{{ result|safe }}</td>
+	</tr>
+</tbody>
+</table>
+
+</form>
+
+    </div>
+{% endblock content %}
