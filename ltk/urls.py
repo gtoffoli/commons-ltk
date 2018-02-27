@@ -17,13 +17,17 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 
-from . import views
+from ltk import views
+from ltk.spacy import views as spacy_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
+    re_path(r'^detection/$', views.LanguageDetection.as_view(), name="detection"),
     re_path(r'^regexp/$', views.Regexp.as_view(), name="regexp"),
-    re_path(r'^language/(?P<language_code>[\w-]*)/set/$', views.language, name="language"),
+    re_path(r'^language/(?P<language_code>[\w-]*)/set/$', views.language_set, name="language"),
+    re_path(r'^dependency/$', spacy_views.SpacyDependency.as_view(), name="dependency"),
+    re_path(r'^entities/$', spacy_views.SpacyNer.as_view(), name="entities"),
     re_path(r'^$', views.home, name="home"),
 ]
 

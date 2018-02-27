@@ -1,0 +1,46 @@
+{% extends "ltk_base.html" %}
+{% load staticfiles i18n %}
+
+{% block head_title %}Regular expressions{% endblock %}
+
+{% block extra_style %}
+<style>
+dt {
+ float:left;
+}
+dd {
+ float:left;
+ padding-left: 1em;
+}
+</style>
+{% endblock extra_style %}
+
+{% block content %}
+    <div class="boxcontent">
+
+	<h1>{% trans "language detection"|capfirst %}</h1>
+<div><smaller><i>{% trans "based on"|capfirst %} <a href="https://github.com/Mimino666/langdetect" target="_blank">langdetect</a>, {% trans "a port of Google's language-detection library to Python" %}</i></smaller></div>
+
+<form action="/detection/" method="post">
+	{% csrf_token %}
+	<input type="hidden" id="index" name="index" value="{{ index }}">
+
+<table class="table table-responsive table-bordered table-striped">
+<tbody>
+	<tr>
+		<td width="80%" >{{ form.text }}</td>
+		<td width="20%" style="text-align: left; vertical-align: middle;"><input type="submit" class="btn btn-sm btn-default" name="detect" value="{% trans "detect"|capfirst %}"></td>
+	</tr>
+</tbody>
+</table>
+
+<dl>
+{% for lang, prob in languages %}
+<dt>{{ lang }}</dt> <dd>{{ prob }}</dd>
+{% endfor %}</div>
+</dl>
+
+</form>
+
+    </div>
+{% endblock content %}

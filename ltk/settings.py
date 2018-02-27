@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.sites',
+    'django_extensions',
     'rest_framework',
     'bootstrap3',
     'menu',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.linkedin_oauth2',
+    'django_dag',
     'actstream',
     'ltk',
 ]

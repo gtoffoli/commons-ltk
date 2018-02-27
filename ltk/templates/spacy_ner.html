@@ -1,0 +1,235 @@
+{% extends "ltk_base.html" %}
+{% load staticfiles i18n %}
+
+{% block head_title %}Named Entity Recognizer (NER){% endblock %}
+
+{% block extra_style %}
+<style>
+.entities {
+     line-height: 2; 
+}
+
+[data-entity] {
+     padding: 0.25em 0.35em;
+     margin: 0px 0.25em;
+     line-height: 1;
+     display: inline-block;
+     border-radius: 0.25em;
+     border: 1px solid; 
+}
+
+[data-entity]::after {
+     box-sizing: border-box;
+     content: attr(data-entity);
+     font-size: 0.6em;
+     line-height: 1;
+     padding: 0.35em;
+     border-radius: 0.35em;
+     text-transform: uppercase;
+     display: inline-block;
+     vertical-align: middle;
+     margin: 0px 0px 0.1rem 0.5rem; 
+}
+
+[data-entity][data-entity="person"] {
+     background: rgba(166, 226, 45, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(166, 226, 45); 
+}
+
+[data-entity][data-entity="person"]::after {
+     background: rgb(166, 226, 45) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="per"] {
+     background: rgba(166, 226, 45, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(166, 226, 45); 
+}
+
+[data-entity][data-entity="per"]::after {
+     background: rgb(166, 226, 45) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="norp"] {
+     background: rgba(224, 0, 132, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(224, 0, 132); 
+}
+
+[data-entity][data-entity="norp"]::after {
+     background: rgb(224, 0, 132) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="facility"] {
+     background: rgba(67, 198, 252, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(67, 198, 252); 
+}
+
+[data-entity][data-entity="facility"]::after {
+     background: rgb(67, 198, 252) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="org"] {
+     background: rgba(67, 198, 252, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(67, 198, 252); 
+}
+
+[data-entity][data-entity="org"]::after {
+     background: rgb(67, 198, 252) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="gpe"] {
+     background: rgba(253, 151, 32, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(253, 151, 32); 
+}
+
+[data-entity][data-entity="gpe"]::after {
+     background: rgb(253, 151, 32) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="loc"] {
+     background: rgba(253, 151, 32, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(253, 151, 32); 
+}
+
+[data-entity][data-entity="loc"]::after {
+     background: rgb(253, 151, 32) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="product"] {
+     background: rgba(142, 125, 255, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(142, 125, 255); 
+}
+
+[data-entity][data-entity="product"]::after {
+     background: rgb(142, 125, 255) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="event"] {
+     background: rgba(255, 204, 0, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(255, 204, 0); 
+}
+
+[data-entity][data-entity="event"]::after {
+     background: rgb(255, 204, 0) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="work_of_art"] {
+     background: rgba(255, 204, 0, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(255, 204, 0); 
+}
+
+[data-entity][data-entity="work_of_art"]::after {
+     background: rgb(255, 204, 0) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="language"] {
+     background: rgba(255, 204, 0, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(255, 204, 0); 
+}
+
+[data-entity][data-entity="language"]::after {
+     background: rgb(255, 204, 0) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="date"] {
+     background: rgba(47, 187, 171, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(47, 187, 171); 
+}
+
+[data-entity][data-entity="date"]::after {
+     background: rgb(47, 187, 171) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="time"] {
+     background: rgba(47, 187, 171, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(47, 187, 171); 
+}
+
+[data-entity][data-entity="time"]::after {
+     background: rgb(47, 187, 171) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="percent"] {
+     background: rgba(153, 153, 153, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(153, 153, 153); 
+}
+
+[data-entity][data-entity="percent"]::after {
+     background: rgb(153, 153, 153) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="money"] {
+     background: rgba(153, 153, 153, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(153, 153, 153); 
+}
+
+[data-entity][data-entity="money"]::after {
+     background: rgb(153, 153, 153) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="quantity"] {
+     background: rgba(153, 153, 153, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(153, 153, 153); 
+}
+
+[data-entity][data-entity="quantity"]::after {
+     background: rgb(153, 153, 153) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="ordinal"] {
+     background: rgba(153, 153, 153, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(153, 153, 153); 
+}
+
+[data-entity][data-entity="ordinal"]::after {
+     background: rgb(153, 153, 153) none repeat scroll 0% 0%; 
+}
+
+[data-entity][data-entity="cardinal"] {
+     background: rgba(153, 153, 153, 0.2) none repeat scroll 0% 0%;
+     border-color: rgb(153, 153, 153); 
+}
+
+[data-entity][data-entity="cardinal"]::after {
+     background: rgb(153, 153, 153) none repeat scroll 0% 0%; 
+}
+</style>
+{% endblock extra_style %}
+
+{% block content %}
+<div class="boxcontent">
+
+<h1>{% trans "named entity recognizer"|capfirst %}</h1>
+<div><smaller><i>{% trans "from"|capfirst %} <a href="https://demos.explosion.ai/displacy-ent/" target="_blank">displaCy Named Entity Visualizer</a> {% trans "by" %} <a href="https://explosion.ai/" target="_blank">Explosion</a></i></smaller></div>
+
+<form action="/entities/" method="post">
+	{% csrf_token %}
+	<input type="hidden" id="index" name="index" value="{{ index }}">
+
+<table class="table table-responsive table-bordered table-striped">
+<tbody>
+	<tr>
+		<td colspan="3">{{ form.text }}</td>
+	</tr>
+	<tr>
+		<td width="20%">{% trans "language model"|capfirst %}<br>{{ form.language_code }}</td>
+		<td width="40%">{% trans "entity types"|capfirst %}<br>{{ form.entity_types }}</td>
+		<td width="40%" style="text-align: left; vertical-align: middle;"><input type="submit" class="btn btn-sm btn-default" name="search" value="{% trans "search"|capfirst %}"></td>
+	</tr>
+</tbody>
+</table>
+
+</form>
+
+<div class="entities">{{ markup|safe }}
+{% comment %}
+<br>{% for span in doc.ents %}
+	    {% if span.label_ %}
+		    <mark data-entity="{{ span.label_ }}">{{ span }}</mark>
+	    {% else %}
+	        {{ span }}
+	    {% endif %}
+	{% endfor %}</div>
+{% endcomment %}
+</div>
+
+{% endblock content %}

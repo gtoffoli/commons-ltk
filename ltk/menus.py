@@ -21,12 +21,20 @@ def about_children(request):
 def start_children(request):
     children = []
     children.append (MenuItem(
-         'Regular expressions',
+         capfirst(_('regular expressions')),
          url='/regexp/'
         ))
     children.append (MenuItem(
-         'Language identification',
-         url='/detect/'
+         capfirst(_('language detection')),
+         url='/detection/'
+        ))
+    children.append (MenuItem(
+         capfirst(_('dependency parsing')),
+         url='/dependency/'
+        ))
+    children.append (MenuItem(
+         capfirst(_('named entity recognition')),
+         url='/entities/'
         ))
     return children        
 
@@ -47,12 +55,12 @@ def languages_children(request):
 def my_ltk_children(request):
     children = []
     children.append (MenuItem(
-         'My documents',
+         capfirst(_("my documents")),
          url='/my_documents/'
         ))
     children.append (MenuItem(
-         'My resources',
-         url='/my_rrsources/'
+         capfirst(_("my resources")),
+         url='/my_resources/'
         ))
     return children        
 
@@ -99,7 +107,7 @@ Menu.add_item("main", MenuItem(capfirst(_("basic text processing")),
                                children=start_children,
                                separator=True))     
 
-Menu.add_item("main", MenuItem(capfirst(_("languages")),
+Menu.add_item("main", MenuItem(capfirst(_("language models")),
                                url='/',
                                icon='',
                                weight=30,

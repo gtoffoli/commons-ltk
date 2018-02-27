@@ -1,0 +1,37 @@
+{% extends "ltk_base.html" %}
+{% load staticfiles i18n %}
+
+{% block head_title %}Named Entity Recognizer (NER){% endblock %}
+
+{% block extra_style %}
+{% endblock extra_style %}
+
+{% block content %}
+<div class="boxcontent">
+
+<h1>{% trans "dependency parser"|capfirst %}</h1>
+<div><smaller><i>{% trans "from"|capfirst %} <a href="https://demos.explosion.ai/displacy/" target="_blank">displaCy Dependency Visualizer</a> {% trans "by" %} <a href="https://explosion.ai/" target="_blank">Explosion</a></i></smaller></div>
+
+<form action="/dependency/" method="post">
+	{% csrf_token %}
+	<input type="hidden" id="index" name="index" value="{{ index }}">
+
+<table class="table table-responsive table-bordered table-striped">
+<tbody>
+	<tr>
+		<td colspan="3">{{ form.text }}</td>
+	</tr>
+	<tr>
+		<td width="20%">{% trans "language model"|capfirst %}<br>{{ form.language_code }}</td>
+		<td width="40%">{% trans "settings"|capfirst %}<br>{{ form.settings }}</td>
+		<td width="40%" style="text-align: left; vertical-align: middle;"><input type="submit" class="btn btn-sm btn-default" name="parse" value="{% trans "parse"|capfirst %}"></td>
+	</tr>
+</tbody>
+</table>
+
+</form>
+
+{% comment %}<div>{{ print_tree }}</div>{% endcomment %}
+<div>{{ svg_tree|safe }}</div>
+
+{% endblock content %}

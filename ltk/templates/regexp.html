@@ -11,8 +11,8 @@
 {% block content %}
     <div class="boxcontent">
 
-	<h1>Regular expression tester</h1>
-<div><smaller><i>From the <a href="https://github.com/ChandraLingam/PyRegex">LearnRegex</a> module by Chandra Lingam</i></smaller></div>
+<h1>Regular expression tester</h1>
+<div><smaller><i>{% trans "from"|capfirst %} <a href="https://github.com/ChandraLingam/PyRegex" target="_blank">LearnRegex</a> module {% trans "by" %} Chandra Lingam</i></smaller></div>
 
 <form action="/regexp/" method="post">
 	{% csrf_token %}
