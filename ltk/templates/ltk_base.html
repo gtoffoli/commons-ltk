@@ -13,116 +13,107 @@
     <meta name="author" content="LINK srl - Giovanni Toffoli, Mariarosaria Manco">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block extra_meta %}{% endblock extra_meta %}
-
     <title>{% block head_title %}{% endblock %}{% if site_name %} | {{ site_name }}{% endif %}</title>
+
     <link rel="icon" href="{% static 'ltk/img/icon-rp.png' %}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{% static 'ltk/img/icon-rp.png' %}" type="image/png">
     {% bootstrap_css %}
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {% if help %}
-    <link rel="stylesheet" type="text/css" href="{% static 'ltk/tooltipster/css/tooltipster.bundle.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'ltk/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css' %}">
-    {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'ltk/css/ltk.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'ltk/css/dropmenu.css' %}">
     {% block extra_style %}{% endblock extra_style %}
-
-    <script src="{% static "admin/js/vendor/jquery/jquery.min.js" %}"></script>
 </head>
 
 <body id="{% block body_id %}{% endblock body_id %}">
     
     {% block topbar_base %}
-        <header class="pTBLR10">
-            <div class="container">
-                <div class="pull-left pull-left-width hidden-xs" style="vertical-align: middle;"><a href="/" title="Homepage"><img src="{% static 'ltk/img/logo_commons.png' %}" class="img-responsive" style="float: left" alt="{{ site_name }}"><span style="font-style:italic; font-size: x-large;"> - LTK</span></a></div>
-            </div>
-        </header>
+    <header class="pTBLR10">
 
-            <div class="container">
-                    <div>
-                      {% block nav %}
-                        {% with menu=menus.main %}<ul class="nav navbar-nav navbar-left ul-left">
-                          {% for item in menu %}
-                            <li class="{% if item.children %} dropdown{% endif %}" id="top-menu-{{ item.slug }}">
-                            {% if item.children %}
-                              <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}&nbsp;<b class="caret"></b></a>
-                              <ul class="dropdown-menu">
-                                {% for child in item.children %}
-                                  {% if child.selected %}
-                                    <script type="text/javascript">
-                                      $("#top-menu-"+"{{item.slug }}").addClass('active');
-                                    </script>
-                                  {% endif %}
-                                  <li {% if child.selected %}class="active"{% endif %}><a href="{{ child.url }}">{{ classe }} {{ child.title }}</a></li>
-                                {% endfor %}
-                              </ul>
-                            {% else %}
-                              <a href="{{ item.url }}">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}</a>
-                            {% endif %}
-                            </li>
-                          {% endfor %}
-                        </ul>{% endwith %}
-                        <ul class="nav navbar-nav navbar-right ul-right" style="display:inline-block">
-                          <li class="hidden-sm"><div class="navbar-search">
-                            <form action="/i18n/setlang/" method="post">{% csrf_token %}
-                              <input type="hidden" name="next" value="{{ path_no_language }}">
-                              {% trans "UI language" %}
-                              <select name="language" class="form-control font13 bc-demigray" style="padding:5px; height: 30px; color: black;" onchange='this.form.submit()'>
-                              {% for code, language in LANGUAGES %}
-                                <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected="selected"{% endif %}>{{ language }}</option>
-                              {% endfor %}
-                              </select>
-                            </form>
-                          </div></li>
-                       </ul>
-                      {% endblock nav %}
-                    </div>
-            </div>
-    {% endblock topbar_base %}
+        <div class="container">
 
-    {% block content_base %}
-        <div class="container-fluid">
+            <div class="class="nav navbar-nav navbar-left hidden-xs" style="display:inline-block; vertical-align: middle; line-height: 62px;">
+            	<a href="/" title="Homepage"><img src="{% static 'ltk/img/logo_commons.png' %}" class="img-responsive" style="float: left; vertical-align: middle;" alt="{{ site_name }}">
+            	<span style="font-style:italic; font-size: x-large;"> - LTK</span></a>
+
+				<div class="dropdown" style="display:inline-block; vertical-align: middle; line-height: 62px;">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				    <a id="dLabel" role="button" data-toggle="dropdown" class="dropdown-toggle btn btn-primary" href="#">
+				    	<i class="fa fa-bars" aria-hidden="True"></i></a>
+					<ul class="ul-left dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+					{% with menu=menus.main %}
+					{% for item in menu %}
+						{% if item.children %}
+						<li class="dropdown-submenu">
+							<a href="#">{{ item.title }}</a>
+							<ul class="dropdown-menu">
+							{% for child in item.children %}
+								{% if child.children %}
+									<li class="dropdown-submenu">
+										<a href="#">{{ child.title }}</a>
+										<ul class="dropdown-menu">
+										{% for grandson in child.children %}
+											<li><a href="{{ grandson.url }}">{{ grandson.title }}</a></li>
+										{% endfor %}
+										</ul>
+									</li>
+								{% else %}
+									<li><a href="{{ child.url }}">{{ child.title }}</a></li>
+								{% endif %}
+							{% endfor %}
+							</ul>
+						</li>
+						{% else %}
+						<li><a href="{{ item.url }}">{{ item.title }}</a></li>
+						{% endif %}
+					{% endfor %}
+					{% endwith %}
+					</ul>
+				</div>
+            </div>
+
+            <div class="nav navbar-nav navbar-right" style="vertical-align: middle; line-height: 62px;">
+				<form action="/i18n/setlang/" method="post" style="display:inline-block;">{% csrf_token %}
+					{% trans "UI language" %}
+					<input type="hidden" name="next" value="{{ path_no_language }}">
+					<select name="language" class="font13 bc-demigray" style="padding:5px; height: 30px; color: black;" onchange='this.form.submit()'>
+					{% for code, language in LANGUAGES %}
+						<option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected="selected"{% endif %}>{{ language }}</option>
+					{% endfor %}
+					</select>
+				</form>
+            </div>
+
             {% if user.is_authenticated %}
-                <div class="row back-box">
-                    <div class="hidden-xs col-sm-12 col-md-10 col-lg-10">
-                        <div class="pTB12LR24 summary text-right">
-                            <div class="eti">{% trans "user"|capfirst %}: <i>{{ user.first_name }} {{ user.last_name }}</i></div>
-                            {% if user.is_staff %}
-                            <div class="val"><a href="{% url "admin:index" %}">{% trans "admin"|capfirst %}</a></div>
-                            {% endif %}
-                            <div class="val"><a href="/accounts/profile/">{% trans "my profile"|capfirst %}</a></div>
-                        </div>
-                    </div>
-                    <div class="visible-xs-12 hidden-sm hidden-md hidden-lg">
-                        <div class="pTB12LR24 summary text-left">
-                            <div class="eti">{% trans "user"|capfirst %} <i>{{ user.first_name }} {{ user.last_name }}</i></div>
-                            {% if user.is_staff %}
-                            <div class="val"><a href="{% url "admin:index" %}">{% trans "Admin" %}</a></div>
-                            {% endif %}
-                            <div class="val"><a href="/accounts/profile/">{% trans "My profile" %}</a></div>
-                            <div class="val"><a href="/my_resources/">{% trans "My resources" %}</a></div>
-{% comment %}
-                            <div class="val"><a href="{% url "account_logout" %}" title="{% trans "Logout" %}" >{% trans "Sign Out" %}</a></div>
-{% endcomment %}
-                        </div>
+            <div class="row">
+                    <div class="summary text-right">
+                        <div class="eti">{% trans "user"|capfirst %}: <i>{{ user.first_name }} {{ user.last_name }}</i></div>
+                        {% if user.is_staff %}
+                        <div class="val"><a href="{% url "admin:index" %}">{% trans "admin"|capfirst %}</a></div>
+                        {% endif %}
+                        <div class="val"><a href="/accounts/profile/">{% trans "my profile"|capfirst %}</a></div>
+                        <div class="val"><a href="/my_resources/">{% trans "my resources"|capfirst %}</a></div>
+                        <div class="val"><a href="{% url "account_logout" %}" title="{% trans "Logout" %}" >{% trans "Sign Out" %}</a></div>
                     </div>
                 </div>
             {% endif %}
+ 
+        </div>
+    </header>
+    {% endblock topbar_base %}
+
+    {% block content_base %}
+        <div class="container">
             <div class="row mB20">
-                <div class="col-sm-12 col-md-10 col-lg-10">
+                <div class="col-sm-12 col-md-12 col-lg-12">
                     {% block content %}
                     {% endblock content %}
-                </div>
-                <div class="col-sm-12 col-md-2 col-lg-2">
-                    {% block pub-content %}
-                    {% endblock pub-content %}
                 </div>
             </div>
         </div>
     {% endblock content_base %}
     
     {% block footer_base %}
-        <div class="container-fluid fontSize13 pT10 pB20" style="background:#027FB3; color:#aaa"><a href="#" class="scrollup">Scroll</a>
+        <div class="container fontSize13 pT10 pB20" style="background:#027FB3; color:#aaa"><a href="#" class="scrollup">Scroll</a>
             <div class="container">
                 <div class="pull-left">&copy; {% now "Y" %} LINK SRL - P. IVA 02098911007 :: Via Udine 30 - 00161 Roma :: <a href="mailto:toffoli@linkroma.it" style="color:#ddd">toffoli@linkroma.it</a> - www.linkroma.it</div><div class="pull-right"><a href="/help/privacy" style="color:#ddd">PRIVACY</a></div>
             </div>

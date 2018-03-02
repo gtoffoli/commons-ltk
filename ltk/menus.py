@@ -38,18 +38,28 @@ def start_children(request):
         ))
     return children        
 
+
+def language_children(request, code):
+    children = []
+    children.append (MenuItem(
+         capfirst(_('show')),
+         url='/language/%s/info/' % code,
+        ))
+    children.append (MenuItem(
+         capfirst(_('set as default')),
+         url='/language/%s/set/' % code,
+        ))
+    return children        
+
 def languages_children(request):
     children = []
     for code, name in settings.LANGUAGES:
-        children.append (MenuItem(
+        language_menu = MenuItem(
              name,
              url='/language/%s/set/' % code,
-             # selected=lambda code: get_language(request)==code,
-            ))
-    children.append (MenuItem(
-         'none',
-         url='/language//set/',
-        ))
+             children=language_children(request, code),
+        )
+        children.append(language_menu)
     return children        
 
 def my_ltk_children(request):
@@ -91,7 +101,6 @@ def help_children(request):
          url='/info/i18n/',
         ))
     return children
-
 
 Menu.add_item("main", MenuItem(capfirst(_("about")),
                                url='/p',

@@ -25,7 +25,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     re_path(r'^detection/$', views.LanguageDetection.as_view(), name="detection"),
     re_path(r'^regexp/$', views.Regexp.as_view(), name="regexp"),
-    re_path(r'^language/(?P<language_code>[\w-]*)/set/$', views.language_set, name="language"),
+    re_path(r'^language/(?P<language_code>[\w-]*)/set/$', views.language, name="language"),
     re_path(r'^dependency/$', spacy_views.SpacyDependency.as_view(), name="dependency"),
     re_path(r'^entities/$', spacy_views.SpacyNer.as_view(), name="entities"),
     re_path(r'^$', views.home, name="home"),
@@ -33,6 +33,6 @@ urlpatterns = [
 
 urlpatterns += [
     # url (r'^accounts/signup/$', views.signup, name='account_signup'), # 131015 GT
-    # url (r'^accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),
     re_path(r'^accounts/profile/', TemplateView.as_view(template_name='account/profile.html'), name='welcome',),
 ]   
